@@ -47,7 +47,7 @@
     "mypy_strict": {
       "passed": 43,
       "failed": 3,
-      "pass_rate": 0.934
+      "pass_rate": 0.935
     },
     "pytest": {
       "passed": 42,
