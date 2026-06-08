@@ -1,0 +1,52 @@
+{
+  "train": {
+    "records": 4500,
+    "purpose": "supervised fine-tuning",
+    "target_task_types": {
+      "complete_implementation": 1575,
+      "subsystem_implementation": 1125,
+      "bug_fix": 900,
+      "test_generation": 450,
+      "refactor": 315,
+      "code_explanation": 135
+    }
+  },
+  "validation": {
+    "records": 250,
+    "purpose": "checkpoint selection and overfitting checks",
+    "target_task_types": {
+      "complete_implementation": 88,
+      "subsystem_implementation": 63,
+      "bug_fix": 50,
+      "test_generation": 25,
+      "refactor": 17,
+      "code_explanation": 7
+    }
+  },
+  "test": {
+    "records": 250,
+    "purpose": "final held-out evaluation",
+    "target_task_types": {
+      "complete_implementation": 88,
+      "subsystem_implementation": 63,
+      "bug_fix": 50,
+      "test_generation": 25,
+      "refactor": 17,
+      "code_explanation": 7
+    }
+  },
+  "leakage_controls": [
+    "no shared generation seeds across splits",
+    "no shared rendered prompts across splits",
+    "no duplicate specs across splits",
+    "some feature combinations held out for validation and test",
+    "specs are split by spec_id, not by rendered output",
+    "validation and test specs are frozen before training data generation"
+  ],
+  "split_method": "spec-based",
+  "split_ratios": {
+    "train": 0.9,
+    "validation": 0.05,
+    "test": 0.05
+  }
+}

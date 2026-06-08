@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Roguelike Training Data Schema",
+  "description": "Schema for roguelike code training data in JSONL format",
+  "type": "object",
+  "required": ["id", "split", "metadata", "messages"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the record",
+      "pattern": "^(train|val|test)_[a-z_]+_[0-9]+$"
+    },
+    "split": {
+      "type": "string",
+      "enum": ["train", "validation", "test"],
+      "description": "Dataset split"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["domain", "language", "difficulty", "task_type"],
+      "properties": {
+        "domain": {
+          "type": "string",
+          "enum": ["roguelike"],
+          "description": "Code domain"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["python"],
+          "description": "Programming language"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["beginner", "intermediate", "advanced"],
+          "description": "Difficulty level"
+        },
+        "task_type": {
+          "type": "string",
+          "enum": ["complete_implementation", "subsystem_implementation", "bug_fix", "test_generation", "refactor", "code_explanation"],
+          "description": "Type of coding task"
+        },
+        "architecture": {
+          "type": "string",
+          "enum": ["single_file", "standalone_module", "package"],
+          "description": "Code architecture style"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of roguelike features covered"
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "compileall": {
+              "type": "boolean",
+              "description": "Passes Python compileall check"
+            },
+            "ruff": {
+              "type": "boolean",
+              "description": "Passes ruff linting"
+            },
+            "mypy_strict": {
+              "type": "boolean",
+              "description": "Passes mypy with strict mode"
+            },
+            "pytest": {
+              "type": "boolean",
+              "description": "Passes pytest tests"
+            },
+            "headless_run": {
+              "type": "boolean",
+              "description": "Passes headless simulation"
+            }
+          },
+          "required": ["compileall", "ruff", "mypy_strict", "pytest"]
+        }
+      }
+    },
+    "messages": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant"],
+            "description": "Message role"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content"
+          }
+        }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "properties": {
+        "spec_id": {
+          "type": "string",
+          "description": "ID of the generation specification"
+        },
+        "template_version": {
+          "type": "string",
+          "description": "Version of the prompt template"
+        },
+        "seed": {
+          "type": "integer",
+          "description": "Random seed used for generation"
+        }
+      }
+    },
+    "code_metrics": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "integer",
+          "description": "Number of files in the solution"
+        },
+        "loc": {
+          "type": "integer",
+          "description": "Lines of code"
+        },
+        "classes": {
+          "type": "integer",
+          "description": "Number of classes"
+        },
+        "functions": {
+          "type": "integer",
+          "description": "Number of functions"
+        }
+      }
+    }
+  }
+}
