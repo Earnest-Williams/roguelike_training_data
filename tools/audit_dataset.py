@@ -104,6 +104,13 @@ def hash_normalized(text: str) -> str:
     return hashlib.sha256(normalized.encode()).hexdigest()
 
 
+def as_object(value: Any) -> dict[str, Any]:
+    """Return value when it is a JSON object, otherwise an empty object."""
+    if isinstance(value, dict):
+        return value
+    return {}
+
+
 def extract_code_blocks(content: str) -> list[str]:
     """Extract Python code blocks from content."""
     blocks: list[str] = []
@@ -138,6 +145,8 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
         errors.append(f"Record is not a dict, got {type(record).__name__}")
         return errors
 
+    schema_properties = as_object(schema.get("properties", {}))
+
     # Check required fields
     for field in schema.get("required", []):
         if field not in record:
@@ -148,7 +157,8 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
         if not isinstance(record["id"], str):
             errors.append(f"ID must be a string, got {type(record['id']).__name__}")
         else:
-            id_pattern = schema.get("properties", {}).get("id", {}).get("pattern", "")
+            id_schema = as_object(schema_properties.get("id", {}))
+            id_pattern = id_schema.get("pattern", "")
             if id_pattern:
                 try:
                     if not re.match(id_pattern, record["id"]):
@@ -165,7 +175,8 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
                 f"Split must be a string, got {type(record['split']).__name__}"
             )
         else:
-            split_enum = schema.get("properties", {}).get("split", {}).get("enum", [])
+            split_schema = as_object(schema_properties.get("split", {}))
+            split_enum = split_schema.get("enum", [])
             if split_enum and record["split"] not in split_enum:
                 errors.append(
                     f"Invalid split value: {record['split']}. Must be one of {split_enum}"
@@ -178,7 +189,8 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
                 f"Metadata must be an object, got {type(record['metadata']).__name__}"
             )
         else:
-            meta_schema = schema.get("properties", {}).get("metadata", {})
+            meta_schema = as_object(schema_properties.get("metadata", {}))
+            meta_properties = as_object(meta_schema.get("properties", {}))
 
             # Required metadata fields
             for field in meta_schema.get("required", []):
@@ -187,21 +199,19 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
 
             # Enum validations
             enum_fields = {
-                "task_type": meta_schema.get("properties", {})
-                .get("task_type", {})
-                .get("enum", []),
-                "difficulty": meta_schema.get("properties", {})
-                .get("difficulty", {})
-                .get("enum", []),
-                "domain": meta_schema.get("properties", {})
-                .get("domain", {})
-                .get("enum", []),
-                "language": meta_schema.get("properties", {})
-                .get("language", {})
-                .get("enum", []),
-                "architecture": meta_schema.get("properties", {})
-                .get("architecture", {})
-                .get("enum", []),
+                "task_type": as_object(meta_properties.get("task_type", {})).get(
+                    "enum", []
+                ),
+                "difficulty": as_object(meta_properties.get("difficulty", {})).get(
+                    "enum", []
+                ),
+                "domain": as_object(meta_properties.get("domain", {})).get("enum", []),
+                "language": as_object(meta_properties.get("language", {})).get(
+                    "enum", []
+                ),
+                "architecture": as_object(meta_properties.get("architecture", {})).get(
+                    "enum", []
+                ),
             }
 
             for field, valid_values in enum_fields.items():
@@ -238,19 +248,16 @@ def validate_schema(record: Any, schema: dict[str, Any]) -> list[str]:
                         f"Metadata field 'validation' must be an object, got {type(val_data).__name__}"
                     )
                 else:
-                    val_schema = (
-                        schema.get("properties", {})
-                        .get("metadata", {})
-                        .get("properties", {})
-                        .get("validation", {})
-                    )
+                    val_schema = as_object(meta_properties.get("validation", {}))
                     for field in val_schema.get("required", []):
                         if field not in val_data:
                             errors.append(
                                 f"Missing required metadata.validation field: {field}"
                             )
 
-                    for field, field_schema in val_schema.get("properties", {}).items():
+                    val_properties = as_object(val_schema.get("properties", {}))
+                    for field, field_schema_raw in val_properties.items():
+                        field_schema = as_object(field_schema_raw)
                         if field in val_data and field_schema.get("type") == "boolean":
                             if not isinstance(val_data[field], bool):
                                 errors.append(
