@@ -1,11 +1,11 @@
 {
-  "audit_date": "2025-01-15T12:00:00Z",
+  "audit_date": "2026-06-08T13:52:30Z",
   "summary": {
-    "total_records": 4632,
+    "total_records": 4642,
     "train_records": 4500,
-    "validation_records": 46,
-    "test_records": 86,
-    "unique_ids": 4632,
+    "validation_records": 51,
+    "test_records": 91,
+    "unique_ids": 4642,
     "duplicate_ids_count": 0,
     "parse_errors": 0,
     "schema_errors": 0,
@@ -16,11 +16,11 @@
   "schema_errors": {},
   "split_mismatches": [],
   "duplicate_prompts": {
-    "total_unique_prompts": 233,
+    "total_unique_prompts": 243,
     "unique_prompts_per_split": {
       "train": 101,
-      "validation": 46,
-      "test": 86
+      "validation": 51,
+      "test": 91
     },
     "cross_split_prompt_count": 0,
     "cross_split_prompts": {},
@@ -896,11 +896,11 @@
     }
   },
   "duplicate_code": {
-    "total_unique_code_blocks": 613,
+    "total_unique_code_blocks": 621,
     "unique_code_per_split": {
       "train": 483,
-      "validation": 45,
-      "test": 85
+      "validation": 49,
+      "test": 89
     },
     "cross_split_code_count": 0,
     "within_split_duplicate_code": {
@@ -3817,10 +3817,20 @@
       "test_generation": 277
     },
     "validation": {
-      "complete_implementation": 46
+      "complete_implementation": 46,
+      "subsystem_implementation": 1,
+      "bug_fix": 1,
+      "test_generation": 1,
+      "refactor": 1,
+      "code_explanation": 1
     },
     "test": {
-      "complete_implementation": 86
+      "complete_implementation": 86,
+      "subsystem_implementation": 1,
+      "bug_fix": 1,
+      "test_generation": 1,
+      "refactor": 1,
+      "code_explanation": 1
     }
   },
   "difficulty_distribution": {
@@ -3830,14 +3840,14 @@
       "advanced": 1225
     },
     "validation": {
-      "advanced": 35,
+      "advanced": 37,
       "beginner": 1,
-      "intermediate": 10
+      "intermediate": 13
     },
     "test": {
       "beginner": 3,
       "intermediate": 19,
-      "advanced": 64
+      "advanced": 69
     }
   },
   "feature_distribution": {
@@ -3895,7 +3905,27 @@
       "cellular_automata": 43,
       "cave_generation": 44,
       "connectivity_repair": 41,
-      "deterministic_seed": 42
+      "deterministic_seed": 42,
+      "field_of_view": 1,
+      "octant_rays": 1,
+      "walls_visible": 1,
+      "radius_limit": 1,
+      "pathfinding": 1,
+      "blocked_tiles": 1,
+      "corner_cutting": 1,
+      "diagnostic_tests": 1,
+      "inventory": 1,
+      "stacking": 1,
+      "equipment": 1,
+      "pytest": 1,
+      "turn_scheduler": 1,
+      "refactor": 1,
+      "stable_api": 1,
+      "energy_queue": 1,
+      "map_generation": 1,
+      "connectivity": 1,
+      "corridor_carving": 1,
+      "failure_modes": 1
     },
     "test": {
       "cellular_automata": 80,
@@ -3903,7 +3933,31 @@
       "connectivity": 85,
       "noise": 82,
       "thresholds": 78,
-      "deterministic_seed": 80
+      "deterministic_seed": 80,
+      "monster_ai": 1,
+      "state_machine": 1,
+      "flee": 1,
+      "pathfinding": 1,
+      "line_of_sight": 1,
+      "astar": 1,
+      "terrain_cost": 1,
+      "stale_heap_entries": 1,
+      "blocked_goal": 1,
+      "save_load": 1,
+      "entity_ids": 1,
+      "inventory": 1,
+      "round_trip": 1,
+      "pytest": 1,
+      "event_log": 1,
+      "command_pattern": 1,
+      "undo": 1,
+      "combat": 1,
+      "refactor": 1,
+      "architecture": 1,
+      "ecs": 1,
+      "systems": 1,
+      "dependency_direction": 1,
+      "tradeoffs": 1
     }
   }
 }

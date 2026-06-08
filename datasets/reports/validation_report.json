@@ -1,26 +1,51 @@
 {
-  "report_date": "2025-01-15T12:00:00Z",
+  "report_date": "2026-06-08T13:52:30Z",
   "dataset": "validation",
-  "total_records": 46,
+  "total_records": 51,
   "summary": {
-    "unique_ids": 46,
+    "unique_ids": 51,
     "duplicate_records": 0,
-    "unique_prompts": 46,
+    "unique_prompts": 51,
     "note": "Validation checks (compileall, ruff, mypy_strict, pytest, headless_run) are NOT RUN. All pass rates and benchmark scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": 46
+    "complete_implementation": 46,
+    "subsystem_implementation": 1,
+    "bug_fix": 1,
+    "test_generation": 1,
+    "refactor": 1,
+    "code_explanation": 1
   },
   "difficulty_distribution": {
-    "advanced": 35,
+    "advanced": 37,
     "beginner": 1,
-    "intermediate": 10
+    "intermediate": 13
   },
   "feature_distribution": {
     "cellular_automata": 43,
     "cave_generation": 44,
     "connectivity_repair": 41,
-    "deterministic_seed": 42
+    "deterministic_seed": 42,
+    "field_of_view": 1,
+    "octant_rays": 1,
+    "walls_visible": 1,
+    "radius_limit": 1,
+    "pathfinding": 1,
+    "blocked_tiles": 1,
+    "corner_cutting": 1,
+    "diagnostic_tests": 1,
+    "inventory": 1,
+    "stacking": 1,
+    "equipment": 1,
+    "pytest": 1,
+    "turn_scheduler": 1,
+    "refactor": 1,
+    "stable_api": 1,
+    "energy_queue": 1,
+    "map_generation": 1,
+    "connectivity": 1,
+    "corridor_carving": 1,
+    "failure_modes": 1
   },
   "validation_checks": {
     "compileall": {
@@ -41,10 +66,9 @@
     }
   },
   "data_quality_warnings": [
-    "Validation set has 46 unique prompts out of 46 records",
+    "Validation set has 51 unique prompts out of 51 records",
     "Cross-split duplicate prompts: 0",
-    "Prompt duplication across splits violates README leakage controls",
-    "Validation set should be regenerated from held-out specs with varied prompt templates",
+    "Cross-split duplicate code blocks: 0",
     "All validation pass rates are unverified until code validation is run"
   ]
 }
