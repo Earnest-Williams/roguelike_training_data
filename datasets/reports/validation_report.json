@@ -3,109 +3,47 @@
   "dataset": "validation",
   "total_records": 46,
   "summary": {
-    "pass_rate": 0.98,
-    "average_token_length": 1250,
     "unique_ids": 46,
     "duplicate_records": 0,
     "unique_prompts": 2,
-    "unique_code_blocks": 46
+    "note": "Validation checks (compileall, ruff, mypy_strict, pytest, headless_run) are NOT RUN. All pass rates and benchmark scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": {
-      "count": 46,
-      "pass_rate": 0.98,
-      "average_loc": 180
-    }
+    "complete_implementation": 46
   },
   "difficulty_distribution": {
-    "advanced": {
-      "count": 46,
-      "pass_rate": 0.98
-    }
+    "advanced": 35,
+    "beginner": 1,
+    "intermediate": 10
   },
   "feature_distribution": {
-    "cellular_automata": 45,
-    "cave_generation": 45,
-    "connectivity_repair": 45,
-    "deterministic_seed": 45,
-    "shadowcasting": 1,
-    "field_of_view": 1,
-    "permissive": 1,
-    "octants": 1
+    "cellular_automata": 43,
+    "cave_generation": 44,
+    "connectivity_repair": 41,
+    "deterministic_seed": 42
   },
   "validation_checks": {
     "compileall": {
-      "passed": 45,
-      "failed": 1,
-      "pass_rate": 0.978
+      "status": "not_run"
     },
     "ruff": {
-      "passed": 44,
-      "failed": 2,
-      "pass_rate": 0.957
+      "status": "not_run"
     },
     "mypy_strict": {
-      "passed": 43,
-      "failed": 3,
-      "pass_rate": 0.935
+      "status": "not_run"
     },
     "pytest": {
-      "passed": 42,
-      "failed": 4,
-      "pass_rate": 0.913
+      "status": "not_run"
     },
     "headless_run": {
-      "passed": 42,
-      "failed": 4,
-      "pass_rate": 0.913,
+      "status": "not_run",
       "note": "Only applicable to complete implementations"
     }
   },
-  "quality_metrics": {
-    "average_files_per_record": 1,
-    "average_classes_per_record": 5,
-    "average_functions_per_record": 10,
-    "code_completeness_score": 0.97
-  },
-  "issues_found": [
-    {
-      "issue_type": "prompt_duplication",
-      "count": 45,
-      "examples": ["All validation records except 1 use the same generic prompt: 'Write a single-file Python roguelike. Requirements: Use strict type annotations, Include pytest tests, Handle edge cases'"],
-      "severity": "critical",
-      "recommendation": "Regenerate validation set with varied prompts based on held-out specs"
-    },
-    {
-      "issue_type": "mypy_strict",
-      "count": 3,
-      "examples": ["missing return type annotation", "incompatible type in assignment"],
-      "severity": "medium"
-    },
-    {
-      "issue_type": "ruff",
-      "count": 2,
-      "examples": ["line too long", "unused import"],
-      "severity": "low"
-    },
-    {
-      "issue_type": "pytest",
-      "count": 4,
-      "examples": ["assertion failure in edge case", "missing test coverage"],
-      "severity": "medium"
-    }
-  ],
-  "recommendations": [
-    "CRITICAL: Regenerate validation set with unique prompts derived from validation_specs.jsonl",
-    "Each validation record should have a prompt specific to its spec",
-    "Ensure no prompt from validation appears in training set",
-    "Review mypy strict violations for type consistency",
-    "Add more edge case tests for cellular automata scenarios",
-    "Ensure all complete implementations pass headless simulation"
-  ],
   "data_quality_warnings": [
-    "Validation set currently has 46 records but only 2 unique prompts",
-    "45 of 46 validation records share the exact same user prompt as training records",
-    "This creates severe leakage and will inflate validation scores",
-    "Validation set should be regenerated from held-out specs with varied prompt templates"
+    "Validation set has 2 unique prompts out of 46 records",
+    "Prompt duplication across splits violates README leakage controls",
+    "Validation set should be regenerated from held-out specs with varied prompt templates",
+    "All validation pass rates are unverified until code validation is run"
   ]
 }

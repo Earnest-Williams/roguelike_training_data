@@ -3,12 +3,12 @@
     "records": 4500,
     "purpose": "supervised fine-tuning",
     "actual_task_types": {
-      "complete_implementation": 2141,
-      "subsystem_implementation": 1117,
       "bug_fix": 657,
-      "test_generation": 277,
+      "code_explanation": 135,
+      "complete_implementation": 2141,
       "refactor": 173,
-      "code_explanation": 135
+      "subsystem_implementation": 1117,
+      "test_generation": 277
     },
     "target_task_types": {
       "complete_implementation": 1575,
@@ -26,7 +26,7 @@
       "complete_implementation": 46
     },
     "target_task_types": {
-      "complete_implementation": 46
+      "complete_implementation": 250
     }
   },
   "test": {
@@ -36,7 +36,7 @@
       "complete_implementation": 86
     },
     "target_task_types": {
-      "complete_implementation": 86
+      "complete_implementation": 250
     }
   },
   "leakage_controls": [
@@ -53,11 +53,12 @@
     "validation": 0.05,
     "test": 0.05
   },
-  "notes": [
-    "CRITICAL: Current dataset has massive prompt duplication - 2141 train records share the same user prompt",
-    "Validation and test sets also use the same generic prompt as training",
+  "data_quality_notes": [
+    "CRITICAL: Current dataset has massive prompt duplication across splits",
+    "Train: 4500 records with 93 unique prompts",
+    "Validation: 46 records with 2 unique prompts",
+    "Test: 86 records with 2 unique prompts",
     "This violates leakage controls and must be fixed before training",
-    "Specs are properly separated but prompt templates were not varied",
-    "Recommendation: Regenerate prompts with varied templates and spec-specific requirements"
+    "Specs are properly separated but prompt templates were not varied"
   ]
 }

@@ -3,115 +3,58 @@
   "dataset": "test",
   "total_records": 86,
   "summary": {
-    "overall_pass_rate": 0.95,
-    "average_token_length": 1400,
     "unique_ids": 86,
     "duplicate_records": 0,
     "unique_prompts": 2,
-    "unique_code_blocks": 86,
-    "final_benchmark_score": 0.952
+    "note": "Test benchmarks are NOT RUN. All scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": {
-      "count": 86,
-      "pass_rate": 0.94,
-      "average_loc": 200,
-      "feature_completion_score": 0.96
-    }
+    "complete_implementation": 86
   },
   "difficulty_distribution": {
-    "beginner": {
-      "count": 1,
-      "pass_rate": 1.0
-    },
-    "advanced": {
-      "count": 85,
-      "pass_rate": 0.94
-    }
+    "beginner": 3,
+    "intermediate": 19,
+    "advanced": 64
   },
-  "feature_completion_scores": {
-    "cellular_automata": 0.98,
-    "cave_generation": 0.97,
-    "connectivity": 0.96,
-    "noise": 0.95,
-    "thresholds": 0.94,
-    "deterministic_seed": 0.98,
-    "shadowcasting": 0.88
+  "feature_distribution": {
+    "cellular_automata": 80,
+    "cave_generation": 82,
+    "connectivity": 85,
+    "noise": 82,
+    "thresholds": 78,
+    "deterministic_seed": 80
   },
   "validation_checks": {
     "compileall": {
-      "passed": 84,
-      "failed": 2,
-      "pass_rate": 0.977
+      "status": "not_run"
     },
     "ruff": {
-      "passed": 83,
-      "failed": 3,
-      "pass_rate": 0.965
+      "status": "not_run"
     },
     "mypy_strict": {
-      "passed": 82,
-      "failed": 4,
-      "pass_rate": 0.953
+      "status": "not_run"
     },
     "pytest": {
-      "passed": 81,
-      "failed": 5,
-      "pass_rate": 0.942
+      "status": "not_run"
     },
     "headless_run": {
-      "passed": 80,
-      "failed": 6,
-      "pass_rate": 0.930,
+      "status": "not_run",
       "note": "Only applicable to complete implementations"
     }
   },
-  "hallucination_analysis": {
-    "total_dependencies_mentioned": 0,
-    "actual_dependencies_used": 0,
-    "hallucinated_dependency_rate": 0.0,
-    "false_positive_rate": 0.0,
-    "note": "All records use only Python standard library as required"
-  },
-  "formatting_compliance": {
-    "code_block_formatting": 0.99,
-    "type_annotation_compliance": 0.97,
-    "import_organization": 0.98
-  },
   "benchmark_results": {
-    "overall_score": 0.952,
-    "code_quality_score": 0.96,
-    "feature_completeness_score": 0.94,
-    "constraint_compliance_score": 0.97,
-    "determinism_score": 0.98
+    "overall_score": null,
+    "code_quality_score": null,
+    "feature_completeness_score": null,
+    "constraint_compliance_score": null,
+    "determinism_score": null,
+    "note": "All benchmark scores are unverified until code validation is run"
   },
-  "per_task_type_results": {
-    "complete_implementation": {
-      "compile_success_rate": 0.977,\n      "pytest_success_rate": 0.942,
-      "headless_simulation_success_rate": 0.930,
-      "feature_completion_rate": 0.96
-    }
-  },
-  "recommendations": [
-    "CRITICAL: Regenerate test set with unique prompts derived from test_specs.jsonl",
-    "Each test record should have a prompt specific to its spec",
-    "Ensure no prompt from test appears in training or validation sets",
-    "Focus on improving shadowcasting FOV implementation pass rates",
-    "Review cellular automata cave generation for edge cases",
-    "Ensure all advanced tasks include comprehensive tests",
-    "Improve headless simulation robustness for complete implementations"
-  ],
   "data_quality_warnings": [
-    "Test set currently has 86 records but only 2 unique prompts",
-    "85 of 86 test records share the exact same user prompt as training and validation records",
-    "This creates severe leakage and will inflate test scores",
+    "Test set has 2 unique prompts out of 86 records",
+    "Prompt duplication across splits violates README leakage controls",
     "Test set MUST be regenerated from held-out test_specs.jsonl with varied prompt templates",
-    "Current test set is NOT suitable for final evaluation"
-  ],
-  "model_performance_notes": [
-    "Model performs well on subsystem implementations",
-    "Bug fixes show good resolution rates but some edge cases missed",
-    "Complete implementations need better headless simulation support",
-    "Advanced features like shadowcasting need more training examples"
+    "Current test set is NOT suitable for final evaluation",
+    "All test pass rates and benchmark scores are unverified"
   ]
 }
