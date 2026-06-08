@@ -42,7 +42,7 @@
     "compileall": {
       "passed": 84,
       "failed": 2,
-      "pass_rate": 0.976
+      "pass_rate": 0.977
     },
     "ruff": {
       "passed": 83,
