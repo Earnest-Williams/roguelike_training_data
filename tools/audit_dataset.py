@@ -277,8 +277,10 @@ def audit_dataset(verbose=False):
             
             # Track IDs globally
             if record_id in all_ids:
+                if record_id not in duplicate_ids:
+                    duplicate_ids[record_id].append(all_ids[record_id])
                 duplicate_ids[record_id].append(split_name)
-            all_ids.add(record_id)
+            all_ids[record_id] = split_name
             
             # Check split consistency
             record_split = record.get("split", "")
