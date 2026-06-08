@@ -57,7 +57,7 @@
     "pytest": {
       "passed": 81,
       "failed": 5,
-      "pass_rate": 0.941
+      "pass_rate": 0.942
     },
     "headless_run": {
       "passed": 80,
