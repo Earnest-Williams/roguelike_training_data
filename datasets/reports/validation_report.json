@@ -1,129 +1,49 @@
 {
-  "report_date": "2024-01-15T12:00:00Z",
+  "report_date": "2025-01-15T12:00:00Z",
   "dataset": "validation",
-  "total_records": 250,
+  "total_records": 46,
   "summary": {
-    "pass_rate": 0.98,
-    "average_token_length": 1250,
-    "unique_ids": 250,
-    "duplicate_records": 0
+    "unique_ids": 46,
+    "duplicate_records": 0,
+    "unique_prompts": 2,
+    "note": "Validation checks (compileall, ruff, mypy_strict, pytest, headless_run) are NOT RUN. All pass rates and benchmark scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": {
-      "count": 88,
-      "pass_rate": 0.97,
-      "average_loc": 180
-    },
-    "subsystem_implementation": {
-      "count": 63,
-      "pass_rate": 0.99,
-      "average_loc": 120
-    },
-    "bug_fix": {
-      "count": 50,
-      "pass_rate": 0.98,
-      "average_loc": 95
-    },
-    "test_generation": {
-      "count": 25,
-      "pass_rate": 1.0,
-      "average_loc": 75
-    },
-    "refactor": {
-      "count": 17,
-      "pass_rate": 0.94,
-      "average_loc": 140
-    },
-    "code_explanation": {
-      "count": 7,
-      "pass_rate": 1.0,
-      "average_loc": 30
-    }
+    "complete_implementation": 46
   },
   "difficulty_distribution": {
-    "beginner": {
-      "count": 60,
-      "pass_rate": 0.99
-    },
-    "intermediate": {
-      "count": 120,
-      "pass_rate": 0.98
-    },
-    "advanced": {
-      "count": 70,
-      "pass_rate": 0.96
-    }
+    "advanced": 35,
+    "beginner": 1,
+    "intermediate": 10
   },
   "feature_distribution": {
-    "rooms_and_corridors": 45,
-    "combat": 60,
-    "astar": 35,
-    "bfs": 20,
-    "inventory": 25,
-    "save_load": 15,
-    "field_of_view": 10,
-    "monster_ai": 20,
-    "headless_simulation": 15,
-    "pytest": 200,
-    "bug_fix": 50
+    "cellular_automata": 43,
+    "cave_generation": 44,
+    "connectivity_repair": 41,
+    "deterministic_seed": 42
   },
   "validation_checks": {
     "compileall": {
-      "passed": 248,
-      "failed": 2,
-      "pass_rate": 0.992
+      "status": "not_run"
     },
     "ruff": {
-      "passed": 245,
-      "failed": 5,
-      "pass_rate": 0.98
+      "status": "not_run"
     },
     "mypy_strict": {
-      "passed": 242,
-      "failed": 8,
-      "pass_rate": 0.968
+      "status": "not_run"
     },
     "pytest": {
-      "passed": 240,
-      "failed": 10,
-      "pass_rate": 0.96
+      "status": "not_run"
     },
     "headless_run": {
-      "passed": 85,
-      "failed": 5,
-      "pass_rate": 0.944,
+      "status": "not_run",
       "note": "Only applicable to complete implementations"
     }
   },
-  "quality_metrics": {
-    "average_files_per_record": 1.2,
-    "average_classes_per_record": 3.5,
-    "average_functions_per_record": 8.2,
-    "code_completeness_score": 0.97
-  },
-  "issues_found": [
-    {
-      "issue_type": "mypy_strict",
-      "count": 8,
-      "examples": ["missing return type annotation", "incompatible type in assignment"],
-      "severity": "medium"
-    },
-    {
-      "issue_type": "ruff",
-      "count": 5,
-      "examples": ["line too long", "unused import"],
-      "severity": "low"
-    },
-    {
-      "issue_type": "pytest",
-      "count": 10,
-      "examples": ["assertion failure in edge case", "missing test coverage"],
-      "severity": "medium"
-    }
-  ],
-  "recommendations": [
-    "Review mypy strict violations for type consistency",
-    "Add more edge case tests for pathfinding scenarios",
-    "Ensure all complete implementations pass headless simulation"
+  "data_quality_warnings": [
+    "Validation set has 2 unique prompts out of 46 records",
+    "Prompt duplication across splits violates README leakage controls",
+    "Validation set should be regenerated from held-out specs with varied prompt templates",
+    "All validation pass rates are unverified until code validation is run"
   ]
 }

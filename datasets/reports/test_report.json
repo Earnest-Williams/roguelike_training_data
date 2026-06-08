@@ -1,167 +1,60 @@
 {
-  "report_date": "2024-01-15T12:00:00Z",
+  "report_date": "2025-01-15T12:00:00Z",
   "dataset": "test",
-  "total_records": 250,
+  "total_records": 86,
   "summary": {
-    "overall_pass_rate": 0.95,
-    "average_token_length": 1400,
-    "unique_ids": 250,
+    "unique_ids": 86,
     "duplicate_records": 0,
-    "final_benchmark_score": 0.952
+    "unique_prompts": 2,
+    "note": "Test benchmarks are NOT RUN. All scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": {
-      "count": 88,
-      "pass_rate": 0.94,
-      "average_loc": 200,
-      "feature_completion_score": 0.96
-    },
-    "subsystem_implementation": {
-      "count": 63,
-      "pass_rate": 0.97,
-      "average_loc": 130,
-      "feature_completion_score": 0.98
-    },
-    "bug_fix": {
-      "count": 50,
-      "pass_rate": 0.93,
-      "average_loc": 100,
-      "bug_resolution_score": 0.91
-    },
-    "test_generation": {
-      "count": 25,
-      "pass_rate": 0.99,
-      "average_loc": 80,
-      "coverage_score": 0.97
-    },
-    "refactor": {
-      "count": 17,
-      "pass_rate": 0.92,
-      "average_loc": 150,
-      "behavior_preservation_score": 0.94
-    },
-    "code_explanation": {
-      "count": 7,
-      "pass_rate": 1.0,
-      "average_loc": 35,
-      "accuracy_score": 0.98
-    }
+    "complete_implementation": 86
   },
   "difficulty_distribution": {
-    "beginner": {
-      "count": 40,
-      "pass_rate": 0.99
-    },
-    "intermediate": {
-      "count": 100,
-      "pass_rate": 0.96
-    },
-    "advanced": {
-      "count": 110,
-      "pass_rate": 0.92
-    }
+    "beginner": 3,
+    "intermediate": 19,
+    "advanced": 64
   },
-  "feature_completion_scores": {
-    "rooms_and_corridors": 0.98,
-    "combat": 0.97,
-    "astar_pathfinding": 0.94,
-    "bfs_flood_fill": 0.96,
-    "inventory": 0.95,
-    "save_load": 0.93,
-    "field_of_view": 0.91,
-    "monster_ai": 0.92,
-    "headless_simulation": 0.90,
-    "cellular_automata": 0.89,
-    "shadowcasting": 0.88
+  "feature_distribution": {
+    "cellular_automata": 80,
+    "cave_generation": 82,
+    "connectivity": 85,
+    "noise": 82,
+    "thresholds": 78,
+    "deterministic_seed": 80
   },
   "validation_checks": {
     "compileall": {
-      "passed": 245,
-      "failed": 5,
-      "pass_rate": 0.98
+      "status": "not_run"
     },
     "ruff": {
-      "passed": 242,
-      "failed": 8,
-      "pass_rate": 0.968
+      "status": "not_run"
     },
     "mypy_strict": {
-      "passed": 238,
-      "failed": 12,
-      "pass_rate": 0.952
+      "status": "not_run"
     },
     "pytest": {
-      "passed": 235,
-      "failed": 15,
-      "pass_rate": 0.94
+      "status": "not_run"
     },
     "headless_run": {
-      "passed": 88,
-      "failed": 12,
-      "pass_rate": 0.88,
+      "status": "not_run",
       "note": "Only applicable to complete implementations"
     }
   },
-  "hallucination_analysis": {
-    "total_dependencies_mentioned": 150,
-    "actual_dependencies_used": 145,
-    "hallucinated_dependency_rate": 0.033,
-    "false_positive_rate": 0.02
-  },
-  "formatting_compliance": {
-    "code_block_formatting": 0.99,
-    "type_annotation_compliance": 0.97,
-    "import_organization": 0.98
-  },
   "benchmark_results": {
-    "overall_score": 0.952,
-    "code_quality_score": 0.96,
-    "feature_completeness_score": 0.94,
-    "constraint_compliance_score": 0.97,
-    "determinism_score": 0.98
+    "overall_score": null,
+    "code_quality_score": null,
+    "feature_completeness_score": null,
+    "constraint_compliance_score": null,
+    "determinism_score": null,
+    "note": "All benchmark scores are unverified until code validation is run"
   },
-  "per_task_type_results": {
-    "complete_implementation": {
-      "compile_success_rate": 0.98,
-      "pytest_success_rate": 0.94,
-      "headless_simulation_success_rate": 0.90,
-      "feature_completion_rate": 0.96
-    },
-    "subsystem_implementation": {
-      "compile_success_rate": 0.99,
-      "pytest_success_rate": 0.97,
-      "feature_completion_rate": 0.98
-    },
-    "bug_fix": {
-      "compile_success_rate": 0.98,
-      "pytest_success_rate": 0.93,
-      "bug_resolution_rate": 0.91
-    },
-    "test_generation": {
-      "compile_success_rate": 1.0,
-      "pytest_success_rate": 0.99,
-      "coverage_rate": 0.97
-    },
-    "refactor": {
-      "compile_success_rate": 0.97,
-      "pytest_success_rate": 0.92,
-      "behavior_preservation_rate": 0.94
-    },
-    "code_explanation": {
-      "accuracy_rate": 0.98,
-      "completeness_rate": 0.99
-    }
-  },
-  "recommendations": [
-    "Focus on improving shadowcasting FOV implementation pass rates",
-    "Review cellular automata cave generation for edge cases",
-    "Ensure all advanced tasks include comprehensive tests",
-    "Improve headless simulation robustness for complete implementations"
-  ],
-  "model_performance_notes": [
-    "Model performs well on subsystem implementations",
-    "Bug fixes show good resolution rates but some edge cases missed",
-    "Complete implementations need better headless simulation support",
-    "Advanced features like shadowcasting need more training examples"
+  "data_quality_warnings": [
+    "Test set has 2 unique prompts out of 86 records",
+    "Prompt duplication across splits violates README leakage controls",
+    "Test set MUST be regenerated from held-out test_specs.jsonl with varied prompt templates",
+    "Current test set is NOT suitable for final evaluation",
+    "All test pass rates and benchmark scores are unverified"
   ]
 }

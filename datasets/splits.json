@@ -2,6 +2,14 @@
   "train": {
     "records": 4500,
     "purpose": "supervised fine-tuning",
+    "actual_task_types": {
+      "bug_fix": 657,
+      "code_explanation": 135,
+      "complete_implementation": 2141,
+      "refactor": 173,
+      "subsystem_implementation": 1117,
+      "test_generation": 277
+    },
     "target_task_types": {
       "complete_implementation": 1575,
       "subsystem_implementation": 1125,
@@ -14,15 +22,21 @@
   "validation": {
     "records": 46,
     "purpose": "checkpoint selection and overfitting checks",
-    "target_task_types": {
+    "actual_task_types": {
       "complete_implementation": 46
+    },
+    "target_task_types": {
+      "complete_implementation": 250
     }
   },
   "test": {
     "records": 86,
     "purpose": "final held-out evaluation",
-    "target_task_types": {
+    "actual_task_types": {
       "complete_implementation": 86
+    },
+    "target_task_types": {
+      "complete_implementation": 250
     }
   },
   "leakage_controls": [
@@ -38,5 +52,13 @@
     "train": 0.9,
     "validation": 0.05,
     "test": 0.05
-  }
+  },
+  "data_quality_notes": [
+    "CRITICAL: Current dataset has massive prompt duplication across splits",
+    "Train: 4500 records with 93 unique prompts",
+    "Validation: 46 records with 2 unique prompts",
+    "Test: 86 records with 2 unique prompts",
+    "This violates leakage controls and must be fixed before training",
+    "Specs are properly separated but prompt templates were not varied"
+  ]
 }

@@ -1,0 +1,135 @@
+{
+  "audit_date": "2025-01-15T12:00:00Z",
+  "summary": {
+    "total_records": 4632,
+    "train_records": 4500,
+    "validation_records": 46,
+    "test_records": 86,
+    "unique_ids": 4632,
+    "duplicate_ids": 0,
+    "parse_errors": 0,
+    "schema_errors": 0,
+    "split_mismatches": 0
+  },
+  "duplicate_ids": {},
+  "parse_errors": [],
+  "schema_errors": {},
+  "split_mismatches": [],
+  "duplicate_prompts": {
+    "total_unique_prompts": 95,
+    "unique_prompts_per_split": {
+      "train": 93,
+      "validation": 2,
+      "test": 2
+    },
+    "cross_split_prompt_count": 1
+  },
+  "duplicate_code": {
+    "total_unique_code_blocks": 613,
+    "unique_code_per_split": {
+      "train": 4500,
+      "validation": 46,
+      "test": 86
+    },
+    "cross_split_code_count": 0
+  },
+  "task_type_distribution": {
+    "train": {
+      "bug_fix": 657,
+      "code_explanation": 135,
+      "complete_implementation": 2141,
+      "refactor": 173,
+      "subsystem_implementation": 1117,
+      "test_generation": 277
+    },
+    "validation": {
+      "complete_implementation": 46
+    },
+    "test": {
+      "complete_implementation": 86
+    }
+  },
+  "difficulty_distribution": {
+    "train": {
+      "intermediate": 1603,
+      "beginner": 1672,
+      "advanced": 1225
+    },
+    "validation": {
+      "advanced": 35,
+      "beginner": 1,
+      "intermediate": 10
+    },
+    "test": {
+      "beginner": 3,
+      "intermediate": 19,
+      "advanced": 64
+    }
+  },
+  "feature_distribution": {
+    "train": {
+      "map_generation": 404,
+      "connectivity": 437,
+      "corridors": 378,
+      "astar": 463,
+      "pathfinding": 393,
+      "blocked_tiles": 302,
+      "edge_cases": 221,
+      "combat": 504,
+      "damage": 323,
+      "explanation": 135,
+      "algorithm": 45,
+      "grid": 658,
+      "rooms_and_corridors": 634,
+      "deterministic_seed": 648,
+      "player_spawn": 653,
+      "monster_spawn": 679,
+      "headless_simulation": 665,
+      "bump_combat": 661,
+      "headless": 1339,
+      "simulation": 1318,
+      "deterministic": 1335,
+      "turns": 1339,
+      "refactoring": 168,
+      "modularization": 162,
+      "entities": 158,
+      "grid_pathfinding": 75,
+      "deterministic_neighbor_order": 69,
+      "pytest": 1053,
+      "bfs": 275,
+      "flood_fill": 270,
+      "reachability": 255,
+      "inventory": 277,
+      "items": 286,
+      "pickup": 179,
+      "drop": 188,
+      "save": 136,
+      "load": 135,
+      "json": 127,
+      "serialization": 135,
+      "pathlib": 132,
+      "armor": 134,
+      "clamping": 138,
+      "field_of_view": 132,
+      "shadowcasting": 125,
+      "visibility": 130,
+      "monster_ai": 128,
+      "chase": 128,
+      "death": 162
+    },
+    "validation": {
+      "cellular_automata": 43,
+      "cave_generation": 44,
+      "connectivity_repair": 41,
+      "deterministic_seed": 42
+    },
+    "test": {
+      "cellular_automata": 80,
+      "cave_generation": 82,
+      "connectivity": 85,
+      "noise": 82,
+      "thresholds": 78,
+      "deterministic_seed": 80
+    }
+  }
+}
