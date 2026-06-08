@@ -12,6 +12,7 @@
     "split_mismatches": 0
   },
   "duplicate_ids": {},
+  "parse_errors": [],
   "schema_errors": {},
   "split_mismatches": [],
   "duplicate_prompts": {

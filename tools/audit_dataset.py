@@ -69,7 +69,7 @@ def load_json(filepath):
 
 
 def load_jsonl(filepath):
-    """Load JSONL file, tracking parse errors. Raises AuditError on parse failure."""
+    """Load JSONL file, tracking parse errors. Returns tuple of (records, errors)."""
     records = []
     errors = []
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -81,18 +81,16 @@ def load_jsonl(filepath):
                 record = json.loads(line)
                 records.append(record)
             except json.JSONDecodeError as e:
+                try:
+                    rel_path = str(filepath.relative_to(REPO_ROOT))
+                except ValueError:
+                    rel_path = str(filepath)
                 errors.append({
-                    "file": str(filepath.relative_to(REPO_ROOT)),
+                    "file": rel_path,
                     "line": line_num,
                     "error": str(e)
                 })
-    
-    if errors:
-        for error in errors:
-            print(f"PARSE ERROR: {error['file']}:{error['line']} - {error['error']}", file=sys.stderr)
-        raise AuditError(f"{len(errors)} JSON parse errors in {filepath}")
-    
-    return records
+    return records, errors
 
 
 def hash_normalized(text):
@@ -130,44 +128,36 @@ def validate_schema(record, schema):
     
     # Check ID pattern
     if "id" in record:
-        id_value = record["id"]
-        # Check type
-        if not isinstance(id_value, str):
-            errors.append(f"Field 'id' must be string, got {type(id_value).__name__}")
+        if not isinstance(record["id"], str):
+            errors.append(f"ID must be a string, got {type(record['id']).__name__}")
         else:
             id_pattern = schema.get("properties", {}).get("id", {}).get("pattern", "")
             if id_pattern:
                 try:
-                    if not re.match(id_pattern, id_value):
-                        errors.append(f"ID '{id_value}' does not match pattern: {id_pattern}")
+                    if not re.match(id_pattern, record["id"]):
+                        errors.append(f"ID '{record['id']}' does not match pattern: {id_pattern}")
                 except TypeError:
-                    errors.append(f"ID '{id_value}' caused pattern matching error")
-    else:
-        errors.append("Missing required field: id")
+                    errors.append(f"ID '{record['id']}' caused pattern matching error")
     
     # Check split enum
     if "split" in record:
-        split_value = record["split"]
-        if not isinstance(split_value, str):
-            errors.append(f"Field 'split' must be string, got {type(split_value).__name__}")
+        if not isinstance(record["split"], str):
+            errors.append(f"Split must be a string, got {type(record['split']).__name__}")
         else:
             split_enum = schema.get("properties", {}).get("split", {}).get("enum", [])
-            if split_enum and split_value not in split_enum:
-                errors.append(f"Invalid split value: '{split_value}'. Must be one of {split_enum}")
-    else:
-        errors.append("Missing required field: split")
+            if split_enum and record["split"] not in split_enum:
+                errors.append(f"Invalid split value: {record['split']}. Must be one of {split_enum}")
     
     # Check metadata
     if "metadata" in record:
-        metadata = record["metadata"]
-        if not isinstance(metadata, dict):
-            errors.append(f"Field 'metadata' must be dict, got {type(metadata).__name__}")
+        if not isinstance(record["metadata"], dict):
+            errors.append(f"Metadata must be an object, got {type(record['metadata']).__name__}")
         else:
             meta_schema = schema.get("properties", {}).get("metadata", {})
             
             # Required metadata fields
             for field in meta_schema.get("required", []):
-                if field not in metadata:
+                if field not in record["metadata"]:
                     errors.append(f"Missing required metadata field: {field}")
             
             # Enum validations
@@ -179,41 +169,37 @@ def validate_schema(record, schema):
             }
             
             for field, valid_values in enum_fields.items():
-                if field in metadata:
-                    value = metadata[field]
+                if field in record["metadata"]:
+                    value = record["metadata"][field]
                     if not isinstance(value, str):
-                        errors.append(f"Metadata field '{field}' must be string, got {type(value).__name__}")
+                        errors.append(f"Metadata field '{field}' must be a string, got {type(value).__name__}")
                     elif valid_values and value not in valid_values:
                         errors.append(f"Invalid {field}: '{value}'. Must be one of {valid_values}")
-    else:
-        errors.append("Missing required field: metadata")
     
     # Check messages
     if "messages" in record:
-        messages = record["messages"]
-        if not isinstance(messages, list):
-            errors.append(f"Field 'messages' must be list, got {type(messages).__name__}")
-        elif len(messages) < 2:
-            errors.append("messages must have at least 2 items")
+        if not isinstance(record["messages"], list):
+            errors.append(f"Messages must be an array, got {type(record['messages']).__name__}")
         else:
-            for i, msg in enumerate(messages):
+            if len(record["messages"]) < 2:
+                errors.append("messages must have at least 2 items")
+            
+            for i, msg in enumerate(record["messages"]):
                 if not isinstance(msg, dict):
-                    errors.append(f"message[{i}] must be dict, got {type(msg).__name__}")
+                    errors.append(f"message[{i}] must be an object, got {type(msg).__name__}")
                     continue
-                
-                # Check role
                 if "role" not in msg:
                     errors.append(f"message[{i}]: missing 'role'")
-                elif msg["role"] not in ["system", "user", "assistant"]:
-                    errors.append(f"message[{i}]: invalid role '{msg['role']}'. Must be one of ['system', 'user', 'assistant']")
-                
-                # Check content
+                else:
+                    role = msg["role"]
+                    if not isinstance(role, str):
+                        errors.append(f"message[{i}]: 'role' must be a string, got {type(role).__name__}")
+                    elif role not in ["system", "user", "assistant"]:
+                        errors.append(f"message[{i}]: invalid role '{role}'")
                 if "content" not in msg:
                     errors.append(f"message[{i}]: missing 'content'")
                 elif not isinstance(msg["content"], str):
-                    errors.append(f"message[{i}]: 'content' must be string, got {type(msg['content']).__name__}")
-    else:
-        errors.append("Missing required field: messages")
+                    errors.append(f"message[{i}]: 'content' must be a string, got {type(msg['content']).__name__}")
     
     return errors
 
@@ -246,6 +232,7 @@ def audit_dataset(verbose=False):
     difficulty_counts = defaultdict(lambda: defaultdict(int))
     feature_counts = defaultdict(lambda: defaultdict(int))
     schema_errors = defaultdict(list)
+    all_parse_errors = []
     
     # Track duplicates within splits
     prompts_within_split = defaultdict(lambda: defaultdict(list))
@@ -253,13 +240,27 @@ def audit_dataset(verbose=False):
     
     for split_name, filepath in DATA_FILES.items():
         if verbose:
-            print(f"Loading {filepath.relative_to(REPO_ROOT)}...")
+            try:
+                rel_path = str(filepath.relative_to(REPO_ROOT))
+            except ValueError:
+                rel_path = str(filepath)
+            print(f"Loading {rel_path}...")
         
-        records = load_jsonl(filepath)
+        records, parse_errors = load_jsonl(filepath)
+        all_parse_errors.extend(parse_errors)
         all_records[split_name] = records
         
         for record in records:
             record_id = record.get("id", "MISSING_ID")
+            
+            # Validate schema first to ensure record structure is correct and safe to process
+            schema_errs = validate_schema(record, schema)
+            if schema_errs:
+                schema_errors[split_name].append({
+                    "record_id": record_id,
+                    "errors": schema_errs
+                })
+                continue  # Skip processing malformed records to avoid crashes
             
             # Track IDs globally
             if record_id in all_ids:
@@ -303,14 +304,6 @@ def audit_dataset(verbose=False):
                             code_hash = hash_normalized(code)
                             all_code_hashes[code_hash].append((split_name, record_id))
                             code_within_split[split_name][code_hash].append(record_id)
-            
-            # Validate schema
-            schema_errs = validate_schema(record, schema)
-            if schema_errs:
-                schema_errors[split_name].append({
-                    "record_id": record_id,
-                    "errors": schema_errs
-                })
     
     # Detect cross-split duplicates
     cross_split_prompts = {
@@ -379,11 +372,12 @@ def audit_dataset(verbose=False):
             "test_records": len(all_records.get("test", [])),
             "unique_ids": len(all_ids),
             "duplicate_ids_count": len(duplicate_ids),
-            "parse_errors": 0,  # Would have raised AuditError
+            "parse_errors": len(all_parse_errors),
             "schema_errors": sum(len(v) for v in schema_errors.values()),
             "split_mismatches": len(split_mismatches),
         },
         "duplicate_ids": dict(duplicate_ids),
+        "parse_errors": all_parse_errors,
         "schema_errors": dict(schema_errors),
         "split_mismatches": split_mismatches,
         "duplicate_prompts": {
@@ -646,6 +640,11 @@ def main():
     try:
         # Run audit
         audit_results = audit_dataset(verbose=args.verbose)
+        
+        # Print parse errors to stderr if any
+        if audit_results.get("parse_errors"):
+            for error in audit_results["parse_errors"]:
+                print(f"PARSE ERROR: {error['file']}:{error['line']} - {error['error']}", file=sys.stderr)
         
         # Print summary
         has_critical = print_summary(audit_results)
