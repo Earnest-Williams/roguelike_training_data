@@ -585,7 +585,8 @@ def print_summary(audit_results):
         s['schema_errors'] > 0 or
         s['duplicate_ids_count'] > 0 or
         s['split_mismatches'] > 0 or
-        dup_prompts['cross_split_prompt_count'] > 0
+        dup_prompts['cross_split_prompt_count'] > 0 or
+        dup_code['cross_split_code_count'] > 0
     )
     
     print(f"\n{'❌ CRITICAL ISSUES FOUND' if has_critical else '✅ NO CRITICAL ISSUES'}")
@@ -597,6 +598,8 @@ def print_summary(audit_results):
         print(f"  Split mismatches: {s['split_mismatches']}")
     if dup_prompts['cross_split_prompt_count'] > 0:
         print(f"  Cross-split prompt leakage: {dup_prompts['cross_split_prompt_count']} prompts")
+    if dup_code['cross_split_code_count'] > 0:
+        print(f"  Cross-split code leakage: {dup_code['cross_split_code_count']} code blocks")
     
     print("=" * 80)
     
