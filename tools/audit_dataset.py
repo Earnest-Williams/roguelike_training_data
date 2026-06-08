@@ -111,8 +111,17 @@ def extract_code_blocks(content):
 
 
 def validate_schema(record, schema):
-    """Validate a record against the schema. Returns list of errors."""
+    """Validate a record against the schema. Returns list of errors.
+    
+    Handles type errors gracefully - if a field has the wrong type,
+    it's reported as a schema error rather than crashing.
+    """
     errors = []
+    
+    # Check that record is a dict
+    if not isinstance(record, dict):
+        errors.append(f"Record is not a dict, got {type(record).__name__}")
+        return errors
     
     # Check required fields
     for field in schema.get("required", []):
@@ -121,54 +130,93 @@ def validate_schema(record, schema):
     
     # Check ID pattern
     if "id" in record:
-        id_pattern = schema.get("properties", {}).get("id", {}).get("pattern", "")
-        if id_pattern:
-            if not re.match(id_pattern, record["id"]):
-                errors.append(f"ID '{record['id']}' does not match pattern: {id_pattern}")
+        id_value = record["id"]
+        # Check type
+        if not isinstance(id_value, str):
+            errors.append(f"Field 'id' must be string, got {type(id_value).__name__}")
+        else:
+            id_pattern = schema.get("properties", {}).get("id", {}).get("pattern", "")
+            if id_pattern:
+                try:
+                    if not re.match(id_pattern, id_value):
+                        errors.append(f"ID '{id_value}' does not match pattern: {id_pattern}")
+                except TypeError:
+                    errors.append(f"ID '{id_value}' caused pattern matching error")
+    else:
+        errors.append("Missing required field: id")
     
     # Check split enum
     if "split" in record:
-        split_enum = schema.get("properties", {}).get("split", {}).get("enum", [])
-        if split_enum and record["split"] not in split_enum:
-            errors.append(f"Invalid split value: {record['split']}. Must be one of {split_enum}")
+        split_value = record["split"]
+        if not isinstance(split_value, str):
+            errors.append(f"Field 'split' must be string, got {type(split_value).__name__}")
+        else:
+            split_enum = schema.get("properties", {}).get("split", {}).get("enum", [])
+            if split_enum and split_value not in split_enum:
+                errors.append(f"Invalid split value: '{split_value}'. Must be one of {split_enum}")
+    else:
+        errors.append("Missing required field: split")
     
     # Check metadata
     if "metadata" in record:
-        meta_schema = schema.get("properties", {}).get("metadata", {})
-        
-        # Required metadata fields
-        for field in meta_schema.get("required", []):
-            if field not in record["metadata"]:
-                errors.append(f"Missing required metadata field: {field}")
-        
-        # Enum validations
-        enum_fields = {
-            "task_type": meta_schema.get("properties", {}).get("task_type", {}).get("enum", []),
-            "difficulty": meta_schema.get("properties", {}).get("difficulty", {}).get("enum", []),
-            "domain": meta_schema.get("properties", {}).get("domain", {}).get("enum", []),
-            "language": meta_schema.get("properties", {}).get("language", {}).get("enum", []),
-        }
-        
-        for field, valid_values in enum_fields.items():
-            if field in record["metadata"]:
-                value = record["metadata"][field]
-                if valid_values and value not in valid_values:
-                    errors.append(f"Invalid {field}: '{value}'. Must be one of {valid_values}")
+        metadata = record["metadata"]
+        if not isinstance(metadata, dict):
+            errors.append(f"Field 'metadata' must be dict, got {type(metadata).__name__}")
+        else:
+            meta_schema = schema.get("properties", {}).get("metadata", {})
+            
+            # Required metadata fields
+            for field in meta_schema.get("required", []):
+                if field not in metadata:
+                    errors.append(f"Missing required metadata field: {field}")
+            
+            # Enum validations
+            enum_fields = {
+                "task_type": meta_schema.get("properties", {}).get("task_type", {}).get("enum", []),
+                "difficulty": meta_schema.get("properties", {}).get("difficulty", {}).get("enum", []),
+                "domain": meta_schema.get("properties", {}).get("domain", {}).get("enum", []),
+                "language": meta_schema.get("properties", {}).get("language", {}).get("enum", []),
+            }
+            
+            for field, valid_values in enum_fields.items():
+                if field in metadata:
+                    value = metadata[field]
+                    if not isinstance(value, str):
+                        errors.append(f"Metadata field '{field}' must be string, got {type(value).__name__}")
+                    elif valid_values and value not in valid_values:
+                        errors.append(f"Invalid {field}: '{value}'. Must be one of {valid_values}")
+    else:
+        errors.append("Missing required field: metadata")
     
     # Check messages
     if "messages" in record:
-        if len(record["messages"]) < 2:
+        messages = record["messages"]
+        if not isinstance(messages, list):
+            errors.append(f"Field 'messages' must be list, got {type(messages).__name__}")
+        elif len(messages) < 2:
             errors.append("messages must have at least 2 items")
-        
-        for i, msg in enumerate(record["messages"]):
-            if "role" not in msg:
-                errors.append(f"message[{i}]: missing 'role'")
-            elif msg["role"] not in ["system", "user", "assistant"]:
-                errors.append(f"message[{i}]: invalid role '{msg['role']}'")
-            if "content" not in msg:
-                errors.append(f"message[{i}]: missing 'content'")
+        else:
+            for i, msg in enumerate(messages):
+                if not isinstance(msg, dict):
+                    errors.append(f"message[{i}] must be dict, got {type(msg).__name__}")
+                    continue
+                
+                # Check role
+                if "role" not in msg:
+                    errors.append(f"message[{i}]: missing 'role'")
+                elif msg["role"] not in ["system", "user", "assistant"]:
+                    errors.append(f"message[{i}]: invalid role '{msg['role']}'. Must be one of ['system', 'user', 'assistant']")
+                
+                # Check content
+                if "content" not in msg:
+                    errors.append(f"message[{i}]: missing 'content'")
+                elif not isinstance(msg["content"], str):
+                    errors.append(f"message[{i}]: 'content' must be string, got {type(msg['content']).__name__}")
+    else:
+        errors.append("Missing required field: messages")
     
     return errors
+
 
 
 def audit_dataset(verbose=False):

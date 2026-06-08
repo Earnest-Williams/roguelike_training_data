@@ -5,7 +5,7 @@
   "summary": {
     "unique_ids": 46,
     "duplicate_records": 0,
-    "unique_prompts": 2,
+    "unique_prompts": 46,
     "note": "Validation checks (compileall, ruff, mypy_strict, pytest, headless_run) are NOT RUN. All pass rates and benchmark scores are unverified."
   },
   "task_type_distribution": {
@@ -41,8 +41,8 @@
     }
   },
   "data_quality_warnings": [
-    "Validation set has 2 unique prompts out of 46 records",
-    "Cross-split duplicate prompts: 1",
+    "Validation set has 46 unique prompts out of 46 records",
+    "Cross-split duplicate prompts: 0",
     "Prompt duplication across splits violates README leakage controls",
     "Validation set should be regenerated from held-out specs with varied prompt templates",
     "All validation pass rates are unverified until code validation is run"

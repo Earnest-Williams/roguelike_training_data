@@ -5,7 +5,7 @@
   "summary": {
     "unique_ids": 86,
     "duplicate_records": 0,
-    "unique_prompts": 2,
+    "unique_prompts": 86,
     "note": "Test benchmarks are NOT RUN. All scores are unverified."
   },
   "task_type_distribution": {
@@ -51,8 +51,8 @@
     "note": "All benchmark scores are unverified until code validation is run"
   },
   "data_quality_warnings": [
-    "Test set has 2 unique prompts out of 86 records",
-    "Cross-split duplicate prompts: 1",
+    "Test set has 86 unique prompts out of 86 records",
+    "Cross-split duplicate prompts: 0",
     "Prompt duplication across splits violates README leakage controls",
     "Test set MUST be regenerated from held-out test_specs.jsonl with varied prompt templates",
     "Current test set is NOT suitable for final evaluation",

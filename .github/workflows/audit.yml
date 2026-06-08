@@ -1,0 +1,72 @@
+name: Dataset Audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'datasets/**'
+      - 'tools/audit_dataset.py'
+      - '.github/workflows/audit.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'datasets/**'
+      - 'tools/audit_dataset.py'
+      - '.github/workflows/audit.yml'
+
+jobs:
+  audit:
+    name: Run Dataset Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run audit script
+        run: |
+          python tools/audit_dataset.py --generate-reports
+
+      - name: Verify JSON files parse
+        run: |
+          python -c "
+import json
+import sys
+
+files = [
+    'datasets/splits.json',
+    'datasets/reports/validation_report.json',
+    'datasets/reports/test_report.json',
+    'datasets/audit_results.json',
+    'datasets/schema.json',
+]
+
+for f in files:
+    try:
+        with open(f) as fp:
+            json.load(fp)
+        print(f'✓ {f}')
+    except Exception as e:
+        print(f'✗ {f}: {e}')
+        sys.exit(1)
+
+# Also verify JSONL files
+jsonl_files = ['datasets/train.jsonl', 'datasets/validation.jsonl', 'datasets/test.jsonl']
+for f in jsonl_files:
+    try:
+        with open(f) as fp:
+            for line in fp:
+                line = line.strip()
+                if line:
+                    json.loads(line)
+        print(f'✓ {f}')
+    except Exception as e:
+        print(f'✗ {f}: {e}')
+        sys.exit(1)
+
+print('All JSON files are valid')
+"
