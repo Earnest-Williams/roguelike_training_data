@@ -136,7 +136,7 @@ def validate_schema(record, schema):
                 try:
                     if not re.match(id_pattern, record["id"]):
                         errors.append(f"ID '{record['id']}' does not match pattern: {id_pattern}")
-                except TypeError:
+                except (TypeError, re.error):
                     errors.append(f"ID '{record['id']}' caused pattern matching error")
     
     # Check split enum
@@ -175,6 +175,16 @@ def validate_schema(record, schema):
                         errors.append(f"Metadata field '{field}' must be a string, got {type(value).__name__}")
                     elif valid_values and value not in valid_values:
                         errors.append(f"Invalid {field}: '{value}'. Must be one of {valid_values}")
+            
+            # Validate features field
+            if "features" in record["metadata"]:
+                features = record["metadata"]["features"]
+                if not isinstance(features, list):
+                    errors.append(f"Metadata field 'features' must be a list, got {type(features).__name__}")
+                else:
+                    for idx, feature in enumerate(features):
+                        if not isinstance(feature, str):
+                            errors.append(f"Metadata field 'features[{idx}]' must be a string, got {type(feature).__name__}")
     
     # Check messages
     if "messages" in record:
@@ -223,6 +233,7 @@ def audit_dataset(verbose=False):
     
     # Load all data files
     all_records = {}
+    valid_records = defaultdict(list)
     all_ids = set()
     duplicate_ids = defaultdict(list)
     split_mismatches = []
@@ -251,7 +262,8 @@ def audit_dataset(verbose=False):
         all_records[split_name] = records
         
         for record in records:
-            record_id = record.get("id", "MISSING_ID")
+            is_dict = isinstance(record, dict)
+            record_id = record.get("id", "MISSING_ID") if is_dict else "INVALID_RECORD_TYPE"
             
             # Validate schema first to ensure record structure is correct and safe to process
             schema_errs = validate_schema(record, schema)
@@ -261,6 +273,7 @@ def audit_dataset(verbose=False):
                     "errors": schema_errs
                 })
                 continue  # Skip processing malformed records to avoid crashes
+            valid_records[split_name].append(record)
             
             # Track IDs globally
             if record_id in all_ids:
@@ -345,22 +358,22 @@ def audit_dataset(verbose=False):
     unique_prompts_per_split = {}
     for split_name in DATA_FILES:
         unique_prompts = set()
-        for record in all_records[split_name]:
+        for record in valid_records[split_name]:
             for msg in record.get("messages", []):
                 if msg.get("role") == "user":
-                    unique_prompts.add(msg.get("content", ""))
+                    unique_prompts.add(hash_normalized(msg.get("content", "")))
         unique_prompts_per_split[split_name] = len(unique_prompts)
     
     # Count unique code blocks per split
     unique_code_per_split = {}
     for split_name in DATA_FILES:
         unique_code = set()
-        for record in all_records[split_name]:
+        for record in valid_records[split_name]:
             for msg in record.get("messages", []):
                 if msg.get("role") == "assistant":
                     for code in extract_code_blocks(msg.get("content", "")):
                         if code:
-                            unique_code.add(code)
+                            unique_code.add(hash_normalized(code))
         unique_code_per_split[split_name] = len(unique_code)
     
     return {
