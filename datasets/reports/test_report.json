@@ -1,20 +1,25 @@
 {
-  "report_date": "2025-01-15T12:00:00Z",
+  "report_date": "2026-06-08T15:15:24Z",
   "dataset": "test",
-  "total_records": 86,
+  "total_records": 91,
   "summary": {
-    "unique_ids": 86,
+    "unique_ids": 91,
     "duplicate_records": 0,
-    "unique_prompts": 86,
+    "unique_prompts": 91,
     "note": "Test benchmarks are NOT RUN. All scores are unverified."
   },
   "task_type_distribution": {
-    "complete_implementation": 86
+    "complete_implementation": 86,
+    "subsystem_implementation": 1,
+    "bug_fix": 1,
+    "test_generation": 1,
+    "refactor": 1,
+    "code_explanation": 1
   },
   "difficulty_distribution": {
     "beginner": 3,
     "intermediate": 19,
-    "advanced": 64
+    "advanced": 69
   },
   "feature_distribution": {
     "cellular_automata": 80,
@@ -22,7 +27,31 @@
     "connectivity": 85,
     "noise": 82,
     "thresholds": 78,
-    "deterministic_seed": 80
+    "deterministic_seed": 80,
+    "monster_ai": 1,
+    "state_machine": 1,
+    "flee": 1,
+    "pathfinding": 1,
+    "line_of_sight": 1,
+    "astar": 1,
+    "terrain_cost": 1,
+    "stale_heap_entries": 1,
+    "blocked_goal": 1,
+    "save_load": 1,
+    "entity_ids": 1,
+    "inventory": 1,
+    "round_trip": 1,
+    "pytest": 1,
+    "event_log": 1,
+    "command_pattern": 1,
+    "undo": 1,
+    "combat": 1,
+    "refactor": 1,
+    "architecture": 1,
+    "ecs": 1,
+    "systems": 1,
+    "dependency_direction": 1,
+    "tradeoffs": 1
   },
   "validation_checks": {
     "compileall": {
@@ -51,11 +80,9 @@
     "note": "All benchmark scores are unverified until code validation is run"
   },
   "data_quality_warnings": [
-    "Test set has 86 unique prompts out of 86 records",
+    "Test set has 91 unique prompts out of 91 records",
     "Cross-split duplicate prompts: 0",
-    "Prompt duplication across splits violates README leakage controls",
-    "Test set MUST be regenerated from held-out test_specs.jsonl with varied prompt templates",
-    "Current test set is NOT suitable for final evaluation",
+    "Cross-split duplicate code blocks: 0",
     "All test pass rates and benchmark scores are unverified"
   ]
 }

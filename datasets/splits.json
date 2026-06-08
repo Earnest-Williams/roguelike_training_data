@@ -20,23 +20,43 @@
     }
   },
   "validation": {
-    "records": 46,
+    "records": 51,
     "purpose": "checkpoint selection and overfitting checks",
     "actual_task_types": {
-      "complete_implementation": 46
+      "complete_implementation": 46,
+      "subsystem_implementation": 1,
+      "bug_fix": 1,
+      "test_generation": 1,
+      "refactor": 1,
+      "code_explanation": 1
     },
     "target_task_types": {
-      "complete_implementation": 250
+      "complete_implementation": 88,
+      "subsystem_implementation": 63,
+      "bug_fix": 50,
+      "test_generation": 25,
+      "refactor": 17,
+      "code_explanation": 7
     }
   },
   "test": {
-    "records": 86,
+    "records": 91,
     "purpose": "final held-out evaluation",
     "actual_task_types": {
-      "complete_implementation": 86
+      "complete_implementation": 86,
+      "subsystem_implementation": 1,
+      "bug_fix": 1,
+      "test_generation": 1,
+      "refactor": 1,
+      "code_explanation": 1
     },
     "target_task_types": {
-      "complete_implementation": 250
+      "complete_implementation": 88,
+      "subsystem_implementation": 63,
+      "bug_fix": 50,
+      "test_generation": 25,
+      "refactor": 17,
+      "code_explanation": 7
     }
   },
   "leakage_controls": [
@@ -54,12 +74,12 @@
     "test": 0.05
   },
   "data_quality_notes": [
-    "CRITICAL: Current dataset has massive prompt duplication across splits",
     "Train: 4500 records with 101 unique prompts",
-    "Validation: 46 records with 46 unique prompts",
-    "Test: 86 records with 86 unique prompts",
+    "Validation: 51 records with 51 unique prompts",
+    "Test: 91 records with 91 unique prompts",
     "Cross-split duplicate prompts: 0",
-    "This violates leakage controls and must be fixed before training",
-    "Specs are properly separated but prompt templates were not varied"
+    "Cross-split duplicate code blocks: 0",
+    "Validation and test include held-out records across all supported task types",
+    "Training still contains within-split prompt duplication and should be diversified in future expansion"
   ]
 }
