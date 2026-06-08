@@ -12,27 +12,17 @@
     }
   },
   "validation": {
-    "records": 250,
+    "records": 46,
     "purpose": "checkpoint selection and overfitting checks",
     "target_task_types": {
-      "complete_implementation": 88,
-      "subsystem_implementation": 63,
-      "bug_fix": 50,
-      "test_generation": 25,
-      "refactor": 17,
-      "code_explanation": 7
+      "complete_implementation": 46
     }
   },
   "test": {
-    "records": 250,
+    "records": 86,
     "purpose": "final held-out evaluation",
     "target_task_types": {
-      "complete_implementation": 88,
-      "subsystem_implementation": 63,
-      "bug_fix": 50,
-      "test_generation": 25,
-      "refactor": 17,
-      "code_explanation": 7
+      "complete_implementation": 86
     }
   },
   "leakage_controls": [
