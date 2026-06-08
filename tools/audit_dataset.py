@@ -20,9 +20,9 @@ Usage:
     python tools/audit_dataset.py [--generate-reports] [--verbose]
 
 Exit codes:
-    0 - All checks passed
+    0 - No critical issues found; non-fatal warnings may still be reported
     1 - Critical errors found (schema errors, invalid JSON, duplicate IDs, cross-split leakage)
-    2 - Warnings found (duplicate prompts within split, etc.)
+    2 - Unexpected runtime error while auditing
 """
 
 import argparse
@@ -485,6 +485,20 @@ def audit_dataset(verbose: bool = False) -> dict[str, Any]:
                             unique_code.add(hash_normalized(code))
         unique_code_per_split[split_name] = len(unique_code)
 
+    unique_ids_per_split: dict[str, int] = {}
+    duplicate_records_per_split: dict[str, int] = {}
+    duplicate_id_values = set(duplicate_ids)
+    for split_name in DATA_FILES:
+        split_record_ids = [
+            record["id"]
+            for record in valid_records[split_name]
+            if isinstance(record.get("id"), str)
+        ]
+        unique_ids_per_split[split_name] = len(set(split_record_ids))
+        duplicate_records_per_split[split_name] = sum(
+            1 for record_id in split_record_ids if record_id in duplicate_id_values
+        )
+
     return {
         "audit_date": datetime.now(timezone.utc)
         .replace(microsecond=0)
@@ -502,6 +516,10 @@ def audit_dataset(verbose: bool = False) -> dict[str, Any]:
             "split_mismatches": len(split_mismatches),
         },
         "duplicate_ids": dict(duplicate_ids),
+        "id_quality": {
+            "unique_ids_per_split": unique_ids_per_split,
+            "duplicate_records_per_split": duplicate_records_per_split,
+        },
         "parse_errors": all_parse_errors,
         "schema_errors": dict(schema_errors),
         "split_mismatches": split_mismatches,
@@ -605,8 +623,12 @@ def generate_validation_report(audit_results: dict[str, Any]) -> dict[str, Any]:
         "dataset": "validation",
         "total_records": val_records,
         "summary": {
-            "unique_ids": val_records,
-            "duplicate_records": 0,
+            "unique_ids": audit_results["id_quality"]["unique_ids_per_split"].get(
+                "validation", 0
+            ),
+            "duplicate_records": audit_results["id_quality"][
+                "duplicate_records_per_split"
+            ].get("validation", 0),
             "unique_prompts": audit_results["duplicate_prompts"][
                 "unique_prompts_per_split"
             ].get("validation", 0),
@@ -652,8 +674,12 @@ def generate_test_report(audit_results: dict[str, Any]) -> dict[str, Any]:
         "dataset": "test",
         "total_records": test_records,
         "summary": {
-            "unique_ids": test_records,
-            "duplicate_records": 0,
+            "unique_ids": audit_results["id_quality"]["unique_ids_per_split"].get(
+                "test", 0
+            ),
+            "duplicate_records": audit_results["id_quality"][
+                "duplicate_records_per_split"
+            ].get("test", 0),
             "unique_prompts": audit_results["duplicate_prompts"][
                 "unique_prompts_per_split"
             ].get("test", 0),

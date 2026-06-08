@@ -1,5 +1,5 @@
 {
-  "audit_date": "2026-06-08T13:52:30Z",
+  "audit_date": "2026-06-08T15:15:24Z",
   "summary": {
     "total_records": 4642,
     "train_records": 4500,
@@ -12,6 +12,18 @@
     "split_mismatches": 0
   },
   "duplicate_ids": {},
+  "id_quality": {
+    "unique_ids_per_split": {
+      "train": 4500,
+      "validation": 51,
+      "test": 91
+    },
+    "duplicate_records_per_split": {
+      "train": 0,
+      "validation": 0,
+      "test": 0
+    }
+  },
   "parse_errors": [],
   "schema_errors": {},
   "split_mismatches": [],
