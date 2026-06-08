@@ -234,7 +234,7 @@ def audit_dataset(verbose=False):
     # Load all data files
     all_records = {}
     valid_records = defaultdict(list)
-    all_ids = set()
+    all_ids = {}
     duplicate_ids = defaultdict(list)
     split_mismatches = []
     all_prompts = defaultdict(list)  # hash -> list of (split, record_id)
