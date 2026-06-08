@@ -186,6 +186,24 @@ def validate_schema(record, schema):
                     for idx, feature in enumerate(features):
                         if not isinstance(feature, str):
                             errors.append(f"Metadata field 'features[{idx}]' must be a string, got {type(feature).__name__}")
+
+            # Validate validation field
+            if "validation" in record["metadata"]:
+                val_data = record["metadata"]["validation"]
+                if not isinstance(val_data, dict):
+                    errors.append(f"Metadata field 'validation' must be an object, got {type(val_data).__name__}")
+                else:
+                    val_schema = meta_schema.get("properties", {}).get("validation", {})
+                    for field in val_schema.get("required", []):
+                        if field not in val_data:
+                            errors.append(f"Missing required metadata.validation field: {field}")
+
+                    for field, field_schema in val_schema.get("properties", {}).items():
+                        if field in val_data and field_schema.get("type") == "boolean":
+                            if not isinstance(val_data[field], bool):
+                                errors.append(
+                                    f"metadata.validation.{field} must be a boolean, got {type(val_data[field]).__name__}"
+                                )
     
     # Check messages
     if "messages" in record:
@@ -251,6 +269,9 @@ def audit_dataset(verbose=False):
     code_within_split = defaultdict(lambda: defaultdict(list))
     
     for split_name, filepath in DATA_FILES.items():
+        if not filepath.exists():
+            raise AuditError(f"Dataset file not found: {filepath}")
+
         if verbose:
             try:
                 rel_path = str(filepath.relative_to(REPO_ROOT))
