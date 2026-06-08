@@ -42,7 +42,7 @@
     "ruff": {
       "passed": 44,
       "failed": 2,
-      "pass_rate": 0.956
+      "pass_rate": 0.957
     },
     "mypy_strict": {
       "passed": 43,
