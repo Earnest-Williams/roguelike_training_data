@@ -87,8 +87,7 @@
   },
   "per_task_type_results": {
     "complete_implementation": {
-      "compile_success_rate": 0.976,
-      "pytest_success_rate": 0.941,
+      "compile_success_rate": 0.977,\n      "pytest_success_rate": 0.942,
       "headless_simulation_success_rate": 0.930,
       "feature_completion_rate": 0.96
     }
