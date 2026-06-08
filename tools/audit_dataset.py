@@ -166,6 +166,7 @@ def validate_schema(record, schema):
                 "difficulty": meta_schema.get("properties", {}).get("difficulty", {}).get("enum", []),
                 "domain": meta_schema.get("properties", {}).get("domain", {}).get("enum", []),
                 "language": meta_schema.get("properties", {}).get("language", {}).get("enum", []),
+                "architecture": meta_schema.get("properties", {}).get("architecture", {}).get("enum", []),
             }
             
             for field, valid_values in enum_fields.items():
