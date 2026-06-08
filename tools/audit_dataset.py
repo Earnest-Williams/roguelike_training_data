@@ -103,7 +103,7 @@ def hash_normalized(text):
 
 def extract_code_blocks(content):
     """Extract Python code blocks from content."""
-    pattern = r"```python\n(.*?)```"
+    pattern = r"```python\r?\n(.*?)```"
     matches = re.findall(pattern, content, re.DOTALL)
     return [m.strip() for m in matches]
 
