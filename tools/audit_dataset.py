@@ -193,7 +193,7 @@ def validate_schema(record, schema):
                 if not isinstance(val_data, dict):
                     errors.append(f"Metadata field 'validation' must be an object, got {type(val_data).__name__}")
                 else:
-                    val_schema = meta_schema.get("properties", {}).get("validation", {})
+                    val_schema = schema.get("properties", {}).get("metadata", {}).get("properties", {}).get("validation", {})
                     for field in val_schema.get("required", []):
                         if field not in val_data:
                             errors.append(f"Missing required metadata.validation field: {field}")
@@ -270,7 +270,7 @@ def audit_dataset(verbose=False):
     
     for split_name, filepath in DATA_FILES.items():
         if not filepath.exists():
-            raise AuditError(f"Dataset file not found: {filepath}")
+            raise AuditError(f"Dataset file not found for split '{split_name}': {filepath}")
 
         if verbose:
             try:
