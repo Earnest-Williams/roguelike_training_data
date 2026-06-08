@@ -55,9 +55,10 @@
   },
   "data_quality_notes": [
     "CRITICAL: Current dataset has massive prompt duplication across splits",
-    "Train: 4500 records with 93 unique prompts",
+    "Train: 4500 records with 101 unique prompts",
     "Validation: 46 records with 2 unique prompts",
     "Test: 86 records with 2 unique prompts",
+    "Cross-split duplicate prompts: 1",
     "This violates leakage controls and must be fixed before training",
     "Specs are properly separated but prompt templates were not varied"
   ]
